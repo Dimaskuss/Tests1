@@ -6,7 +6,7 @@ public class User {
     private String login;
     private String email;
 
-    public User() {
+    public User()  {
     }
 
     public User(String login, String email) {
