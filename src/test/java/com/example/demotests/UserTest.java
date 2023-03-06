@@ -1,7 +1,10 @@
 package com.example.demotests;
 
+import com.example.demotests.exceptions.LoginException;
+import com.example.demotests.exceptions.WrongEmailException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import static com.example.demotests.constants.UserTestConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,30 +13,31 @@ class UserTest {
 
 
     @Test
-    public void shouldEqualEmailAndLogin() {
+    public void shouldEqualEmailAndLogin() throws WrongEmailException, LoginException {
         User result = new User(CORRECT_LOGIN, CORRECT_EMAIL);
-        assertNotEquals(result.getLogin(), result.getEmail());
+        assertNotSame(result.getLogin(), result.getEmail());
     }
 
     @Test
-    public void shouldCreateUserWithTwoParams() {
+    public void shouldCreateUserWithTwoParams() throws WrongEmailException, LoginException {
         User result = new User(CORRECT_LOGIN, CORRECT_EMAIL);
-        Assertions.assertTrue(result.getLogin().equals(CORRECT_LOGIN) && result.getEmail().equals(CORRECT_EMAIL));
-
+        Assertions.assertEquals(CORRECT_LOGIN, result.getLogin());
+        Assertions.assertEquals(CORRECT_EMAIL, result.getEmail());
 
     }
 
     @Test
     public void shouldCreateUserWithNoParams() {
         User result = new User();
-        Assertions.assertTrue(result.getLogin() == null && result.getEmail() == null);
-
+        assertNull(result.getLogin());
+        assertNull(result.getEmail());
     }
 
     @Test
     public void shouldValidateEmailParam() {
-        Assertions.assertFalse(WRONG_EMAIL.contains("@") && WRONG_EMAIL.contains("."));
-        Assertions.assertTrue(CORRECT_EMAIL.contains("@") && CORRECT_EMAIL.contains("."));
+
+        assertThrows(WrongEmailException.class, () -> new User(CORRECT_LOGIN, WRONG_EMAIL));
+
 
     }
 
